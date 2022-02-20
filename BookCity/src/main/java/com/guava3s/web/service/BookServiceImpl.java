@@ -45,6 +45,13 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    /**
+     * 包含三步操作
+     * 1、通过书名获取图书id
+     * 2、通过该书名删除该图书
+     * 3、将图书表中被删除图书的记录之后的数据id上移一位
+     * @param title 书名
+     */
     @Transactional(rollbackFor = {Exception.class})
     @Override
     public void deleteBookByTitle(String title) {
