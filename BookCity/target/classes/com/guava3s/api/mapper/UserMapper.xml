@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--绑定Usermapper接口-->
+<mapper namespace="com.guava3s.api.mapper.UserMapper">
+
+    <!--UserDO getUserById(String uid);-->
+    <select id="getUserById" resultType="com.guava3s.bean.UserDO">
+        select * from `user` where username = #{uid} and usable = 1
+    </select>
+
+    <!-- User getUserByIdAndPassword(String id, String password);-->
+    <select id="getUserByIdAndPassword" resultType="com.guava3s.bean.UserDO">
+        select * from `user` where username = #{id} AND password = #{password} and usable = 1
+    </select>
+
+    <!-- 添加一个普通用户（使用默认配置）-->
+    <insert id="insertDefaultUser">
+        insert into `user`(username,password,email) value(#{username},#{password},#{email})
+    </insert>
+
+    <!--    void updateUserStateById(String id，String state);-->
+    <update id="updateUserStateById">
+        update `user` set state = #{state} where username = #{id}
+    </update>
+
+
+</mapper>

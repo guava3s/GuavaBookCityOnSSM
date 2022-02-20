@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--整合mybatis-->
+
+    <!--管理mybatis下操作数据库的会话对象SqlSession-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--配置核心配置文件-->
+        <property name="configLocation" value="classpath:/mybatis/mybatis-conf.xml"></property>
+        <!--设置数据源-->
+        <property name="dataSource" ref="druidDataSource"></property>
+        <!--配置mapper映射文件路径-->
+        <property name="mapperLocations" value="classpath*:/com/guava3s/api/mapper/*.xml"></property>
+    </bean>
+
+    <!--生成Mapper接口动态代理类对象，并交由Spring管理-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.guava3s.api.mapper"></property>
+    </bean>
+</beans>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- binding target interface-->
+<mapper namespace="com.guava3s.api.mapper.BookMapper">
+
+    <!--List<BookDO> listBooks();-->
+    <select id="listBooks" resultType="com.guava3s.bean.BookDO">
+        select * from book
+    </select>
+
+    <!--List<BookDO> listBooksByLimit(@Param("index") Integer index, @Param("pageSize") Integer pageSize);-->
+    <select id="listBooksByLimit" resultType="com.guava3s.bean.BookDO">
+        SELECT * FROM book LIMIT #{index},#{pageSize}
+    </select>
+
+    <!--List<BookDO> listBookByConditionUseLimit(@Param("min") String min, @Param("max") String max,
+                                     @Param("index") Integer index, @Param("pageSize") Integer pageSize);-->
+    <select id="listBookByConditionUseLimit" resultType="com.guava3s.bean.BookDO">
+        select * from book where price between #{min} and #{max} limit #{index}, #{pageSize}
+    </select>
+
+    <!--List<BookDO> listBookByCondition(@Param("min") String min, @Param("max") String max);-->
+    <select id="listBookByCondition" resultType="com.guava3s.bean.BookDO">
+        select * from book where price between #{min} and #{max}
+    </select>
+
+    <!--int countBooks();-->
+    <select id="countBooks" resultType="java.lang.Integer">
+        select COUNT(*) from book
+    </select>
+
+    <!--  Integer countBookByBetween(@Param("min") String min, @Param("max") String max);-->
+    <select id="countBookByBetween" resultType="java.lang.Integer">
+        select COUNT(*) from book where price between #{min} and #{max}
+    </select>
+
+    <!--BookDO getBookByTitle(String title);-->
+    <select id="getBookByTitle" resultType="com.guava3s.bean.BookDO">
+        select * from book where title = #{title}
+    </select>
+
+    <!--BookDO getBookById(String id);-->
+    <select id="getBookById" resultType="com.guava3s.bean.BookDO">
+        select  * from book where id = #{id}
+    </select>
+
+    <!--void updateBookInfo(BookDO BookDO);-->
+    <update id="updateBookInfo">
+        update book
+        set title = #{title},price = #{price},author = #{author},sales = #{sales},stock = #{stock},img_path = #{imgPath}
+        where id = #{id}
+    </update>
+
+    <!--void insertBook(BookDO book);-->
+    <insert id="insertBook" parameterType="com.guava3s.bean.BookDO">
+        insert into book
+        (title,price,author,sales,stock)
+        value(#{title},#{price},#{author},#{sales},#{stock})
+    </insert>
+
+    <insert id="insertBookAll" parameterType="com.guava3s.bean.BookDO">
+        insert into book
+        (title,author,price,sales,stock,img_path)
+        value(#{title},#{price},#{author},#{sales},#{stock},#{imgPath})
+    </insert>
+
+    <!--void flushOrder(Integer targetId);-->
+    <update id="flushOrder" >
+        update book
+        set id = id - 1
+        where id > #{targetId} - 1;
+    </update>
+
+    <!--void deleteBookByTitle(String title);-->
+    <delete id="deleteBookByTitle">
+        delete from book where title = #{title}
+    </delete>
+
+</mapper>

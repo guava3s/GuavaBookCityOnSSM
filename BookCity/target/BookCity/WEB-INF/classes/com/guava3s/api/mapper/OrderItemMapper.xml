@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- binding target interface-->
+<mapper namespace="com.guava3s.api.mapper.OrderMapper">
+
+    <!--void insertOrderItem(OrderItemDO orderItem);-->
+    <insert id="insertOrderItem">
+        insert into orderitemdo (oiiid,oidate,oicount,oiamount,oistate,oiuser)
+        value(#{oiIid},#{oiDate},#{oiCount},#{oiAmount},#{oiState},#{oiUser})
+    </insert>
+
+    <!-- void batchInsertOrderItemDetail(List<OrderDetailDO> detailList);-->
+    <insert id="batchInsertOrderItemDetail" parameterType="java.util.List">
+        insert into orderdetail
+        (odtitle,odamount,odprice,odcount,oiiid)
+        values
+        <foreach collection="list" item="detail" separator=",">
+            (
+            #{detail.odTitle},
+            #{detail.odAmount},
+            #{detail.odPrice},
+            #{detail.odCount},
+            #{detail.oiIid}
+            )
+        </foreach>
+    </insert>
+
+    <!-- List<OrderItemDO> listOrderItemByUserId(String uid);-->
+    <select id="listOrderItemByUserId" resultType="com.guava3s.bean.OrderItemDO">
+        select * from orderitemdo where oiuser = #{uid}
+    </select>
+
+    <!--List<OrderDetailDO> listOrderDetailByUserId(String oiIid);-->
+    <select id="listOrderDetailByUserId" resultType="com.guava3s.bean.OrderDetailDO">
+        select * from orderdetail where oiiid = #{oiIid}
+    </select>
+
+
+    <!--List<OrderItemDO> listOrderItemAndOrderDetailByUserId(String uid);-->
+    <select id="listOrderItemAndOrderDetailByUserId" resultMap="listOrderItemAndOrderDetail">
+        select
+            o1.oiid,o1.oiiid,o1.oidate,o1.oicount,o1.oiamount,o1.oistate,o1.oiuser,
+            o2.odid,o2.odtitle,o2.odamount,o2.odprice,o2.odcount,o2.oiiid
+        from
+            orderitemdo o1,
+            orderdetail o2
+        where
+            o1.oiiid = o2.oiiid
+            and
+            o1.oiuser=#{uid}
+    </select>
+
+    <!--一对多获取-->
+    <resultMap id="listOrderItemAndOrderDetail" type="com.guava3s.bean.OrderItemDO">
+        <id column="oiid" property="oiId"/>
+        <result column="oiiid" property="oiIid"/>
+        <result column="oidate" property="oiDate"/>
+        <result column="oicount" property="oiCount"/>
+        <result column="oiamount" property="oiAmount"/>
+        <result column="oistate" property="oiState"/>
+        <result column="oiuser" property="oiUser"/>
+        <collection property="orderDetailList" ofType="com.guava3s.bean.OrderDetailDO">
+            <id column="odid" property="odId"/>
+            <result column="odtitle" property="odTitle"/>
+            <result column="odamount" property="odAmount"/>
+            <result column="odprice" property="odPrice"/>
+            <result column="odcount" property="odCount"/>
+            <result column="oiiid" property="oiIid"/>
+        </collection>
+    </resultMap>
+
+</mapper>

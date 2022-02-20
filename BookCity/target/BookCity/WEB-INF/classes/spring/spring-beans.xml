@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--扫描组件-->
+    <context:component-scan base-package="com.guava3s">
+        <!--排除控制层组件-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--开启AOP注解功能-->
+    <aop:aspectj-autoproxy/>
+
+    <!--配置Jedis连接缓存服务器-->
+    <bean id="jedis" class="redis.clients.jedis.Jedis">
+        <constructor-arg name="host" value="192.168.200.130"></constructor-arg>
+        <constructor-arg name="port" value="6379"></constructor-arg>
+    </bean>
+
+<!--    &lt;!&ndash;配置PageHelper类对象&ndash;&gt;-->
+<!--    <bean id="pageDO" class="com.guava3s.st.pagehelper.Page">-->
+<!--        <constructor-arg name="pageCapacity" value="4"></constructor-arg>-->
+<!--    </bean>-->
+
+</beans>
